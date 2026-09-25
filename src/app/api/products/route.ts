@@ -3,12 +3,17 @@ import {
   getProducts,
 } from "@/app/features/products/product.service";
 import { createProductSchema } from "@/app/features/products/schemas";
-import z from "zod";
+import { handleApiError } from "@/lib/errors/handle-api-error";
+import { z } from "zod";
 
 export async function GET() {
-  const products = await getProducts();
+  try {
+    const products = await getProducts();
 
-  return Response.json(products);
+    return Response.json(products);
+  } catch (error) {
+    return handleApiError(error);
+  }
 }
 
 export async function POST(request: Request) {
@@ -34,16 +39,6 @@ export async function POST(request: Request) {
 
     return Response.json(product, { status: 201 });
   } catch (error) {
-    console.error("POST /api/products failed:", error);
-
-    return Response.json(
-      {
-        error: {
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Something went wrong",
-        },
-      },
-      { status: 500 },
-    );
+    return handleApiError(error);
   }
 }
