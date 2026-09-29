@@ -1,8 +1,8 @@
 import {
   createProduct,
   getProducts,
-} from "@/app/features/products/product.service";
-import { createProductSchema } from "@/app/features/products/schemas";
+} from "@/features/products/product.service";
+import { createProductSchema } from "@/features/products/schemas";
 import { handleApiError } from "@/lib/errors/handle-api-error";
 import { z } from "zod";
 

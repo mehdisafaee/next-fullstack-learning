@@ -8,6 +8,12 @@ export async function getProducts(): Promise<Product[]> {
   return response.data;
 }
 
+export async function getProduct(id: number): Promise<Product> {
+  const response = await api.get<Product>(`/products/${id}`);
+
+  return response.data;
+}
+
 export async function createProduct(
   input: CreateProductInput,
 ): Promise<Product> {
