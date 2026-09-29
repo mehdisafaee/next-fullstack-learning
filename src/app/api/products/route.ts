@@ -4,6 +4,7 @@ import {
 } from "@/features/products/product.service";
 import { createProductSchema } from "@/features/products/schemas";
 import { handleApiError } from "@/lib/errors/handle-api-error";
+import { updateTag } from "next/cache";
 import { z } from "zod";
 
 export async function GET() {
@@ -36,6 +37,8 @@ export async function POST(request: Request) {
     }
 
     const product = await createProduct(result.data);
+
+    updateTag("products");
 
     return Response.json(product, { status: 201 });
   } catch (error) {

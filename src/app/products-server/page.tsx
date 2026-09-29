@@ -1,7 +1,7 @@
-import { getProducts } from "@/features/products/product.service";
+import { getCachedProducts } from "@/features/products/product.cache";
 
 export default async function ProductsServerPage() {
-  const products = await getProducts();
+  const products = await getCachedProducts();
 
   return (
     <main>
