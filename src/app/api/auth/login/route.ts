@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { loginSchema } from "@/features/auth/login.schema";
-import { loginUser } from "@/features/auth/auth.service";
+import { loginSchema } from "@/features/auth/schemas/login.schema";
+import { loginUser } from "@/features/auth/services/auth.service";
 import { handleApiError } from "@/lib/errors/handle-api-error";
 import { NextResponse } from "next/server";
 

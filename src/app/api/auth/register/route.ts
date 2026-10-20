@@ -1,5 +1,5 @@
-import { registerSchema } from "@/features/auth/auth.schemas";
-import { registerUser } from "@/features/auth/auth.service";
+import { registerSchema } from "@/features/auth/schemas/auth.schemas";
+import { registerUser } from "@/features/auth/services/auth.service";
 import { handleApiError } from "@/lib/errors/handle-api-error";
 import { z } from "zod";
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { ApiError } from "./types";
+let isHandlingSessionExpiration = false;
 
 export const api = axios.create({
   baseURL: "/api",
@@ -18,15 +19,16 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-
+  (response) => response,
   (error) => {
-    if (axios.isAxiosError<ApiError>(error)) {
-      if (error.response) {
-        console.log("API error:", error.response.data.error.message);
-      }
+    if (
+      axios.isAxiosError<ApiError>(error) &&
+      error.response?.status === 401 &&
+      error.response.data?.error?.code === "UNAUTHORIZED" &&
+      !isHandlingSessionExpiration
+    ) {
+      isHandlingSessionExpiration = true;
+      window.dispatchEvent(new Event("session-expired"));
     }
 
     return Promise.reject(error);

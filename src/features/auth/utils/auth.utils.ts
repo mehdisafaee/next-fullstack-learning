@@ -18,7 +18,15 @@ export async function getCurrentUser() {
     include: { user: true },
   });
 
-  if (!session || session.expiresAt <= new Date()) {
+  if (!session) {
+    return null;
+  }
+
+  if (session.expiresAt <= new Date()) {
+    await prisma.session.delete({
+      where: { id: session.id },
+    });
+
     return null;
   }
 

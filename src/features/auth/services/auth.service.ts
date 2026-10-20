@@ -1,9 +1,9 @@
 import argon2 from "argon2";
 
 import prisma from "@/lib/prisma";
-import type { RegisterInput } from "./auth.schemas";
+import { RegisterInput } from "../schemas/auth.schemas";
 import { AppError } from "@/lib/errors/app-error";
-import { LoginInput } from "./login.schema";
+import { LoginInput } from "../schemas/login.schema";
 import { createSession } from "./session.service";
 
 export async function registerUser(input: RegisterInput) {
