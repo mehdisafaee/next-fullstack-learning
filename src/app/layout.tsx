@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ApiErrorProvider } from "@/components/providers/api-error-provider";
 
 import SessionExpiredHandler from "@/features/auth/components/SessionExpiredHandler";
 
@@ -27,8 +28,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <SessionExpiredHandler />
-        {children}
+        <ApiErrorProvider>
+          <SessionExpiredHandler />
+          {children}
+        </ApiErrorProvider>
       </body>
     </html>
   );
