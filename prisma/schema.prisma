@@ -18,6 +18,11 @@ model Product {
   price       Float
   description String?
 
+  userId String
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+
   @@map("product")
 }
 
@@ -27,6 +32,8 @@ model User {
   passwordHash String
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+
+  products Product[]
 
   sessions     Session[]
 }

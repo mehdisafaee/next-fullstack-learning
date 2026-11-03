@@ -1,35 +1,33 @@
-"use client";
+import { Suspense } from "react";
+import { requireCurrentUser } from "@/features/auth/utils/require-current-user";
+import { getCachedProducts } from "@/features/products/product.service";
 
-import { useEffect, useState } from "react";
-import { getProducts } from "@/features/products/product.api";
-import type { Product } from "@/features/products/types";
-
-export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    getProducts()
-      .then(setProducts)
-      .catch(() => {
-        setError("Failed to load products");
-      });
-  }, []);
-
-  if (error) {
-    return <p>{error}</p>;
-  }
+async function ProductsContent() {
+  const user = await requireCurrentUser();
+  const products = await getCachedProducts(user.id);
 
   return (
     <main>
       <h1>Products</h1>
 
-      {products.map((product) => (
-        <div key={product.id}>
-          <h2>{product.name}</h2>
-          <p>{product.price}</p>
-        </div>
-      ))}
+      {products.length === 0 ? (
+        <p>No products found.</p>
+      ) : (
+        products.map((product) => (
+          <div key={product.id}>
+            <h2>{product.name}</h2>
+            <p>{product.price.toString()}</p>
+          </div>
+        ))
+      )}
     </main>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<p className="p-6">Loading products...</p>}>
+      <ProductsContent />
+    </Suspense>
   );
 }

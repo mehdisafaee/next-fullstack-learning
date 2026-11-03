@@ -1,15 +1,17 @@
+import { requireCurrentUser } from "@/features/auth/utils/require-current-user";
 import {
   createProduct,
-  getProducts,
+  getCachedProducts,
 } from "@/features/products/product.service";
 import { createProductSchema } from "@/features/products/schemas";
 import { handleApiError } from "@/lib/errors/handle-api-error";
-import { updateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
 export async function GET() {
   try {
-    const products = await getProducts();
+    const user = await requireCurrentUser();
+    const products = await getCachedProducts(user.id);
 
     return Response.json(products);
   } catch (error) {
@@ -36,9 +38,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const product = await createProduct(result.data);
+    const user = await requireCurrentUser();
+    const product = await createProduct(result.data, user.id);
 
-    updateTag("products");
+    revalidateTag(`products-${user.id}`, "max");
 
     return Response.json(product, { status: 201 });
   } catch (error) {
