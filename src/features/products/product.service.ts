@@ -1,10 +1,11 @@
 import prisma from "@/lib/prisma";
 import { CreateProductInput, UpdateProductInput } from "./schemas";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 export async function getCachedProducts(userId: string) {
   "use cache";
 
+  cacheLife("hours");
   cacheTag(`products-${userId}`);
 
   return prisma.product.findMany({

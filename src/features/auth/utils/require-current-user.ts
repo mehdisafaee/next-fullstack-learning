@@ -1,8 +1,7 @@
-import { cache } from "react";
 import { AppError } from "@/lib/errors/app-error";
 import { getCurrentUser } from "./auth.utils";
 
-export const requireCurrentUser = cache(async () => {
+export async function requireCurrentUser() {
   const user = await getCurrentUser();
 
   if (!user) {
@@ -10,4 +9,4 @@ export const requireCurrentUser = cache(async () => {
   }
 
   return user;
-});
+}
